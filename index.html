@@ -13,8 +13,27 @@
     <style>
 
       .screen {display: none;}
+/****/
+      #map{height: 100%;}
+        html,
+        body{
+          height: 100%;
+          margin: 0;
+          padding: 0; 
+            }
 
     </style>
+<!--  -->
+    <script>
+      let map;
+  
+      function initMap(){
+        map = new google.map.Map(document.querySelector("#map"),{
+          center: {lat:41.8781 , lng:-87.6298},
+          zoom: 8,
+        })
+      }
+    </script> 
 
  <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
@@ -46,7 +65,7 @@
 
   </head>
 
-  <body>
+ <body>
 
 <div class="shadow p-3 mb-5 bg-body rounded">
 
@@ -77,7 +96,7 @@
   </div>
 
   <div class="screen" id="map">
-    
+    MAP
   </div>
 
   <div class="screen" id="data">
@@ -97,6 +116,7 @@
             <h5 class="card-title">Shivansh Modawal</h5>
             <h6 class="card-subtitle mb-2 text-muted">developer</h6>
             <p class="card-text">The app  provides an user friendly interface to gather information about the City owned Land Inventory of Chicago. The application is developed using bootstrap and the app shell model. The 5 screens of the application includes "HOME", "Form",  "Map" , "Data" and "About"</p>
+         
         </div>
       </div>
     </div>
@@ -105,6 +125,25 @@
 
 
 <script>
+
+  document.querySelector("#home").style.display = "block";
+
+    let navAnchors =  document.querySelectorAll("div#topNav a")
+    navAnchors.forEach((anchor)=>{
+
+      anchor.addEventListener("click",(event) =>{
+
+        document.querySelectorAll(".screen").forEach((screen)=>{
+          screen.style.display = "none";
+        })
+
+        let screen = event.target.getAttribute("data-screen");
+
+        let  targetScreen  = document.querySelector("#"+screen);
+
+        targetScreen.style.display = "block";
+      })
+    })
   
 let endpoint = "https://data.cityofchicago.org/resource/aksk-kvfp.json";
 
@@ -123,7 +162,24 @@ document.querySelector("#search").addEventListener("click",(e)=>{
          item["address"] + " - " + item["sq_ft"] + "\n "+
          item["pin"] + "\n ";
         // document.body.append(para);
-        cardT.querySelector("div.card-body").innerText=para.innerText;        
+        cardT.querySelector("div.card-body").innerText=para.innerText;     
+//
+        let marker = new google.maps.Marker({
+        position: {lat: parseFloat(item["latitude"]), lng: parseFloat(item["longitude"]) },
+        map:map
+      })
+
+         const contentString = item["community_area_name"]+ " - " + item["pin"] + "<br>" + item["address"] + " - " + item["sq_ft"];
+
+
+        const infowindow = new google.maps.InfoWindow({
+        content: contentString,
+        });
+
+      marker.addListener("click", () => {
+      infowindow.open(map, marker);
+    });
+
         }
     })
 
@@ -144,7 +200,22 @@ document.querySelector("#search").addEventListener("click",(e)=>{
          item["address"] + " - " + item["sq_ft"] + "\n "+
          item["pin"] + "\n ";
         // document.body.append(para);
-        cardT.querySelector("div.card-body").innerText=para.innerText;        
+        cardT.querySelector("div.card-body").innerText=para.innerText;   
+
+        let marker = new google.maps.Marker({
+        position: {lat: parseFloat(item["latitude"]), lng: parseFloat(ite["longitude"]) },
+        map:map
+      })
+
+        const contentString = item["community_area_name"]+ " - " + item["pin"] + "<br>" + item["address"] + " - " + item["sq_ft"];
+
+        const infowindow = new google.maps.InfoWindow({
+        content: contentString,
+        });
+
+      marker.addListener("click", () => {
+      infowindow.open(map, marker);
+    });     
         }
     })
 
@@ -165,31 +236,36 @@ document.querySelector("#search").addEventListener("click",(e)=>{
          item["address"] + " - " + item["sq_ft"] + "\n "+
          item["pin"] + "\n ";
         // document.body.append(para);
-        cardT.querySelector("div.card-body").innerText=para.innerText;        
+        cardT.querySelector("div.card-body").innerText=para.innerText;  
+
+        let marker = new google.maps.Marker({
+        position: {lat: parseFloat(item["latitude"]), lng: parseFloat(ite["longitude"]) },
+        map:map
+      })
+
+         const contentString = item["community_area_name"]+ " - " + item["pin"] + "<br>" + item["address"] + " - " + item["sq_ft"];
+
+
+        const infowindow = new google.maps.InfoWindow({
+        content: contentString,
+        });
+
+      marker.addListener("click", () => {
+      infowindow.open(map, marker);
+    });      
         }
     })
 
 });
 
-    document.querySelector("#home").style.display = "block";
-
-    let navAnchors =  document.querySelectorAll("div#topNav a")
-    navAnchors.forEach((anchor)=>{
-
-      anchor.addEventListener("click",(event) =>{
-
-        document.querySelectorAll(".screen").forEach((screen)=>{
-          screen.style.display = "none";
-        })
-
-        let screen = event.target.getAttribute("data-screen");
-
-        let  targetScreen  = document.querySelector("#"+screen);
-
-        targetScreen.style.display = "block";
-      })
-    })
   </script>
+
+<!--  -->
+   <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ3JlKCAfq3IFs7n4W6jYupLPnQFneyho&callback=initMap&libraries=&v=weekly"
+        async>
+       </script>
+
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     
